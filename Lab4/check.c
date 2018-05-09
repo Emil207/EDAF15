@@ -104,7 +104,7 @@ void* take_out_first(list_t* list)
 
 	succ = list->succ;
 	take_out(succ);
-	free(succ);
+	free_list(succ);
 
 	return data;
 }
@@ -153,11 +153,11 @@ int main(int ac, char** av)
 	begin = sec();
 
 	while (n > 0) {
-		add(head, xmalloc(nextsize()));
+		add(head, new_list(nextsize()));
 		n -= 1;
 
 		if ((n & 1) && !empty(head))
-			free_list(take_out_first(head));
+			free(take_out_first(head));
 	}
 
 	while (!empty(head))
