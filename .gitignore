@@ -50,3 +50,9 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Fuck it, ignore everything but the files I deem necessary
+*
+!*.c
+!*.txt
+!*.gitignore
