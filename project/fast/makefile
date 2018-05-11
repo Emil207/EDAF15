@@ -9,8 +9,8 @@ FILE	= fast
 execute: compile
 	./fm
 
-compile: clean $(FILE).o malloc.o main.o error.o
-	$(CC) $(CFLAGS) -o $(OUT) -static $(FILE).o malloc.o main.o error.o -lm
+compile: clean $(FILE).o malloc.o testfile.o error.o
+	$(CC) $(CFLAGS) -o $(OUT) -static $(FILE).o malloc.o testfile.o error.o -lm
 
 $(FILE).o: $(FILE).c
 	$(CC) -v 2>&1 | tail -1 > $(NOTE)
@@ -20,7 +20,7 @@ $(FILE).o: $(FILE).c
 	$(CC) -include forsete.h -c $(FILE).c $(CFLAGS) >> $(NOTE)
 
 malloc.o: malloc.c
-	$(CC) -c malloc.c $(CFLAGS) 
+	$(CC) -c malloc.c $(CFLAGS)
 
 clean:
 	rm -f *.s *.o $(OUT) $(NOTE) result score
