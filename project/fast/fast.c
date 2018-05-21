@@ -1,10 +1,16 @@
 #include <stdbool.h>
 #include "rationals.h"
 
+#define CHAR_MAX = 127;
+#define CHAR_MIN = -128;
+#define true = 1;
+#define false = 0;
+
 bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]){
  	struct rational a2[rows][cols];
 	struct rational c2[rows];
-	size_t tmp = 0, tmp2;
+	size_t tmp = 0;
+  signed char tmp2;
 	size_t n1 = 0, n2 = 0, n3 = 0;
 
 	//sort according to m value (positive)
@@ -56,15 +62,32 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 	}
 
 
-	return 1;
+	return true;
 }
 
 bool algorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct rational c[rows], size_t n1, size_t n2, size_t n3){
     if(cols == 1){
-      size_t br = -;
+      signed char B1 = CHAR_MAX;
       for(size_t i = 0; i < n1; i++){
-
+        if(c[i] < B1)
+          B1 = c[i];
       }
+
+      signed char b1 = CHAR_MIN;
+      for(size_t i = n1+1; i < n2; i++){
+        if(c[i] > b1)
+          b1 = c[i];
+      }
+
+      if(b1 > B1)
+        return false;
+
+      for(size_t i = n2+1; i < n3; i++){
+        if(c[i] < 0)
+          return false;
+      }
+
+      return true;
     }
 
   	struct rational cNew[(n1+1)*(n2-n1)+(n3-n2)];
@@ -73,7 +96,6 @@ bool algorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct r
     // extracting variables from positives and negatives
   	for(size_t i = 0; i <= n1; i++){
   		for(size_t j = n1+1; i <= n2; i++){
-        printf("test \n", '-');
   			for (size_t k = 0; k < cols-1; k++){
   				aNew[i*(n2-n1)+j][k] = subq(a2[i][k], a2[j][k]);
   			}
