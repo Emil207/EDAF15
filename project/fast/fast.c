@@ -57,7 +57,7 @@ struct rational divq(struct rational a, struct rational b){
 }
 
 bool gt(struct rational a, struct rational b){
-	struct rational tmp = subq(a, b);
+	struct rational tmp = subq(b, a);
 	if(((tmp.a > 0) && (tmp.b < 0)) || ((tmp.a < 0) && (tmp.b > 0)))
 		return true;
 
@@ -73,11 +73,13 @@ bool gt(struct rational a, struct rational b){
 
 
 bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct rational c[rows], size_t n1, size_t n2, size_t n3){
+    printf("%d \n", n1);
     if(cols == 1){
       struct rational B1;
       B1.a = INT_MAX;
       B1.b = 1;
-      for(size_t i = 0; i < n1; i++){
+      for(size_t i = 0; i <= n1; i++){
+        printf("%d/%d \n", c[i].a, c[i].b);
         if(gt(B1, c[i]))
           B1 = c[i];
       }
@@ -85,11 +87,12 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
       struct rational b1;
       b1.a = INT_MIN;
       b1.b = 1;
-      for(size_t i = n1; i < n2; i++){
+      for(size_t i = n1+1; i < n2; i++){
         if(gt(c[i], b1))
           b1 = c[i];
       }
 
+      printf("%d/%d, %d/%d \n", b1.a, b1.b, B1.a, B1.b);
       if(gt(b1, B1)){
         printf("%s \n", "false1");
         return false;
@@ -248,5 +251,6 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 		}
 	}
 
+  //printRational(a2[0][1]);
 	return FMalgorithm(rows, cols, a2, c2, n1, n2, n3);
 }
