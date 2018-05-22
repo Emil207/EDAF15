@@ -3,12 +3,12 @@
 
 
 typedef struct rational{
-	signed char a;
-	signed char b;
+	int a;
+	int b;
 } rational;
 
-signed char gcd(signed char a, signed char b){
-	signed char tmp;
+int gcd(int a, int b){
+	int tmp;
 	while(b!=0){
 		tmp = b;
 		b = a%b;
@@ -18,7 +18,7 @@ signed char gcd(signed char a, signed char b){
 }
 
 struct rational reduce(struct rational c){
-	signed char d = gcd(c.a, c.b);
+	int d = gcd(c.a, c.b);
 	c.a = c.a/d;
 	c.b = c.b/d;
 	return c;
@@ -58,7 +58,7 @@ struct rational divq(struct rational a, struct rational b){
 
 bool gt(struct rational a, struct rational b){
 	struct rational tmp = subq(a, b);
-	if((tmp.a < 0) != (tmp.b < 0))
+	if(((tmp.a > 0) && (tmp.b < 0)) || ((tmp.a < 0) && (tmp.b > 0)))
 		return true;
 
 	return false;
@@ -68,19 +68,14 @@ bool gt(struct rational a, struct rational b){
 
 
 
-
-
-
-
-
-#define CHAR_MAX  127;
-#define CHAR_MIN  -128;
+#define INT_MAX  2147483647;
+#define INT_MIN  -2147483648;
 
 
 bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct rational c[rows], size_t n1, size_t n2, size_t n3){
     if(cols == 1){
       struct rational B1;
-      B1.a = CHAR_MAX;
+      B1.a = INT_MAX;
       B1.b = 1;
       for(size_t i = 0; i < n1; i++){
         if(gt(B1, c[i]))
@@ -88,24 +83,29 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
       }
 
       struct rational b1;
-      b1.a = CHAR_MIN;
+      b1.a = INT_MIN;
       b1.b = 1;
-      for(size_t i = n1+1; i < n2; i++){
+      for(size_t i = n1; i < n2; i++){
         if(gt(c[i], b1))
           b1 = c[i];
       }
 
-      if(gt(b1, B1))
+      if(gt(b1, B1)){
+        printf("%s \n", "false1");
         return false;
+      }
 
       for(size_t i = n2+1; i < n3; i++){
         struct rational tmp;
         tmp.a = 0;
         tmp.b = 1;
-        if(gt(tmp, c[i]))
+        if(gt(tmp, c[i])){
+          printf("%s \n", "false2");
           return false;
+        }
       }
 
+      printf("%s \n", "true");
       return true;
     }
 
@@ -247,7 +247,6 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 			tmp++;
 		}
 	}
-
 
 	return FMalgorithm(rows, cols, a2, c2, n1, n2, n3);
 }
