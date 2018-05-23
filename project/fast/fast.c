@@ -96,7 +96,7 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
       B1.a = INT_MAX;
       B1.b = 1;
       for(size_t i = 0; i < n1; i++){
-        printf("%d/%d \n", c[i].a, c[i].b);
+        //printf("%d/%d \n", c[i].a, c[i].b);
         if(gt(B1, c[i]))
           B1 = c[i];
       }
@@ -105,12 +105,12 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
       b1.a = INT_MIN;
       b1.b = 1;
       for(size_t i = n1+1; i < n2; i++){
-        printf("%d/%d \n", c[i].a, c[i].b);
+        //printf("%d/%d \n", c[i].a, c[i].b);
         if(gt(c[i], b1))
           b1 = c[i];
       }
 
-      printf("%d/%d, %d/%d \n", b1.a, b1.b, B1.a, B1.b);
+      //printf("%d/%d, %d/%d \n", b1.a, b1.b, B1.a, B1.b);
       if(gt(b1, B1)){
         printf("%s \n", "false1");
         return false;
@@ -137,15 +137,23 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
   	struct rational cNew[newRows];
   	struct rational aNew[newRows][cols-1];
 
+    printf("%s \n", "here recursive part 0");
+
     // extracting variables from positives and negatives
+    printf("%d \n", n1);
+    printf("%d \n", n2);
+    printf("%d \n", n3);
   	for(size_t i = 0; i < n1; i++){
-  		for(size_t j = n1+1; i < n2; i++){
+  		for(size_t j = n1; i < n2; i++){
   			for (size_t k = 0; k < cols-1; k++){
   				aNew[i*(n2-n1)+j][k] = subq(a[i][k], a[j][k]);
+          printf("%d/%d \n", aNew[i*(n2-n1)+j][k].a, aNew[i*(n2-n1)+j][k].b);
   			}
   			cNew[i*(n2-n1)+j] = subq(c[i], c[j]);
   		}
   	}
+
+    printf("%s \n", "here recursive part 1");
 
     // extracting variables from zero values
   	for(size_t i = n2+1; i < (n3-n2); i++){
@@ -155,6 +163,8 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
   		cNew[(n1+1)*(n2-n1)-(n2+1)+i] = c[i];
   	}
 
+    printf("%s \n", "here recursive part 2");
+
     // resort
     struct rational a2[newRows][cols-1];
     struct rational c2[newRows];
@@ -162,10 +172,15 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
     struct rational tmp0 = {0, 1};
     struct rational tmp2;
 
+    printf("%s \n", "here recursive part 3");
+
     //sort according to m value (positive)
     for(size_t i = 0; i < newRows; i++){
+      printf("%d/%d \n", tmp0.a, tmp0.b);
+      printf("%d/%d \n", aNew[i][cols-2].a, aNew[i][cols-2].b);
       if(gt(aNew[i][cols-2], tmp0)){
         tmp2 = a[i][cols-2];
+        printf("%d/%d \n", tmp2.a, tmp2.b);
         for(size_t j = 0; j < cols-1; j++){
           a2[tmp][j] = divq(aNew[i][j], tmp2);
           c2[tmp] = divq(cNew[i], tmp2);
@@ -174,6 +189,7 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
         tmp++;
       }
     }
+    printf("%s \n", "here recursive part 4");
 
     //sort according to m value (negative)
     for(size_t i = 0; i < newRows; i++){
@@ -187,6 +203,7 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
         tmp++;
       }
     }
+    printf("%s \n", "here recursive part 5");
 
     //sort according to m value (zero)
     for(size_t i = 0; i < newRows; i++){
@@ -199,6 +216,8 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
         tmp++;
       }
     }
+
+    printf("%s \n", "here recursive part 6");
 
     return FMalgorithm(newRows, cols-1, a2, c2, n1, n2, n3);
     // // printing matrix
