@@ -62,4 +62,12 @@ struct rational divq(struct rational a, struct rational b){
 	return c;
 }
 
+bool gt(struct rational a, struct rational b){
+	struct rational tmp = subq(a, b);
+	if((tmp.a < 0) != (tmp.b < 0))
+		return true;
+
+	return false;
+}
+
 #endif

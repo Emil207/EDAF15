@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdlib.h>
 
 
 
@@ -18,9 +19,23 @@ int gcd(int a, int b){
 }
 
 struct rational reduce(struct rational c){
+  bool negative = false;
+  //printf("%s \n", "here reduce");
+  if(c.a < 0){
+    negative = !negative;
+    c.a = abs(c.a);
+  }
+  if(c.b < 0){
+    negative = !negative;
+    c.b = abs(c.b);
+  }
+  //printf("%s b %d \n", "here reduce", c.b);
 	int d = gcd(c.a, c.b);
+  //printf("%s gcd %d \n", "here reduce", d);
 	c.a = c.a/d;
 	c.b = c.b/d;
+  if(negative)
+    c.a = -c.a;
 	return c;
 }
 
@@ -36,6 +51,7 @@ struct rational subq(struct rational a, struct rational b){
 	struct rational c;
 	c.b = a.b*b.b;
 	c.a = a.a*b.b - b.a*a.b;
+  //printf("%s a.b %d, b.b %d \n", "here subq", a.b, b.b);
 	c = reduce(c);
 	return c;
 }
@@ -57,8 +73,9 @@ struct rational divq(struct rational a, struct rational b){
 }
 
 bool gt(struct rational a, struct rational b){
+  //printf("%s  %d/%d, %d/%d \n", "here gt", a.a, a.b, b.a, b.b);
 	struct rational tmp = subq(b, a);
-	if(((tmp.a > 0) && (tmp.b < 0)) || ((tmp.a < 0) && (tmp.b > 0)))
+	if(tmp.a < 0)
 		return true;
 
 	return false;
@@ -68,17 +85,17 @@ bool gt(struct rational a, struct rational b){
 
 
 
-#define INT_MAX  2147483647;
-#define INT_MIN  -2147483648;
+#define INT_MAX  32767;
+#define INT_MIN  -32768;
 
 
 bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct rational c[rows], size_t n1, size_t n2, size_t n3){
-    printf("%d \n", n1);
+    printf("%d %d \n", n3, cols);
     if(cols == 1){
       struct rational B1;
       B1.a = INT_MAX;
       B1.b = 1;
-      for(size_t i = 0; i <= n1; i++){
+      for(size_t i = 0; i < n1; i++){
         printf("%d/%d \n", c[i].a, c[i].b);
         if(gt(B1, c[i]))
           B1 = c[i];
@@ -88,6 +105,7 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
       b1.a = INT_MIN;
       b1.b = 1;
       for(size_t i = n1+1; i < n2; i++){
+        printf("%d/%d \n", c[i].a, c[i].b);
         if(gt(c[i], b1))
           b1 = c[i];
       }
@@ -97,6 +115,9 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
         printf("%s \n", "false1");
         return false;
       }
+
+      //for(size_t i = 0; i < n3; i++)
+        //printf("%d/%d \n", c[i].a, c[i].b);
 
       for(size_t i = n2+1; i < n3; i++){
         struct rational tmp;
@@ -117,8 +138,8 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
   	struct rational aNew[newRows][cols-1];
 
     // extracting variables from positives and negatives
-  	for(size_t i = 0; i <= n1; i++){
-  		for(size_t j = n1+1; i <= n2; i++){
+  	for(size_t i = 0; i < n1; i++){
+  		for(size_t j = n1+1; i < n2; i++){
   			for (size_t k = 0; k < cols-1; k++){
   				aNew[i*(n2-n1)+j][k] = subq(a[i][k], a[j][k]);
   			}
@@ -205,6 +226,7 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 	size_t n1, n2, n3;
 
 	//sort according to m value (positive)
+  n1 = tmp;
 	for(size_t i = 0; i < rows; i++){
 		if(a[i][cols-1] > 0){
 			tmp2 = a[i][cols-1];
@@ -214,13 +236,15 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 				a2[tmp][j] = reduce(a2[tmp][j]);
 				c2[tmp].a = c[i];
 				c2[tmp].b = tmp2;
+        c2[tmp] = reduce(c2[tmp]);
 			}
-			n1 = tmp;
 			tmp++;
+			n1 = tmp;
 		}
 	}
 
 	//sort according to m value (negative)
+  n2 = tmp;
 	for(size_t i = 0; i < rows; i++){
 		if(a[i][cols-1] < 0){
 			tmp2 = a[i][cols-1];
@@ -230,13 +254,15 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 				a2[tmp][j] = reduce(a2[tmp][j]);
 				c2[tmp].a = c[i];
 				c2[tmp].b = tmp2;
+        c2[tmp] = reduce(c2[tmp]);
 			}
-			n2 = tmp;
 			tmp++;
+			n2 = tmp;
 		}
 	}
 
 	//sort according to m value (zero)
+  n3 = tmp;
 	for(size_t i = 0; i < rows; i++){
 		if(a[i][cols-1] == 0){
 			for(size_t j = 0; j < cols; j++){
@@ -245,12 +271,13 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 				a2[tmp][j] = reduce(a2[tmp][j]);
 				c2[tmp].a = c[i];
 				c2[tmp].b = 1;
+        c2[tmp] = reduce(c2[tmp]);
 			}
-			n3 = tmp;
 			tmp++;
+			n3 = tmp;
 		}
 	}
-
   //printRational(a2[0][1]);
+  printf("%s \n", "new test starting");
 	return FMalgorithm(rows, cols, a2, c2, n1, n2, n3);
 }
