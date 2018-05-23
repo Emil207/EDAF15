@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 
 
@@ -137,7 +138,55 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
     for(int i = 0; i < rows; i++)
       printf("%d: %d/%d \n", i, a[i][0].a, a[i][0].b);
 
-    size_t newRows = (n1+1)*(n2-n1)+(n3-n2);
+
+    //reorder according to the next variable
+    size_t tmp = 0;
+  //  struct rational a1[rows][cols];
+  //  struct rational c1[rows];
+    struct rational tmp0 = {0, 1};
+    struct rational tmp2;
+    //
+    // n1 = tmp;
+    // for(size_t i = 0; i < rows; i++){
+    //   if(gt(a[i][cols-2], tmp0)){
+    //     for(size_t j = 0; j < cols-1; j++){
+    //       a1[tmp][j] = a[i][j];
+    //       c1[tmp] = c[i];
+    //     }
+    //     tmp++;
+    //     n1 = tmp;
+    //   }
+    // }
+    //
+    // n2 = tmp;
+    // for(size_t i = 0; i < rows; i++){
+    //   if(gt(tmp0, a[i][cols-2])){
+    //     tmp2 = a[i][cols-2];
+    //     for(size_t j = 0; j < cols-1; j++){
+    //       a1[tmp][j] = a[i][j];
+    //       c1[tmp] = c[i];
+    //     }
+    //     tmp++;
+    //     n2 = tmp;
+    //   }
+    // }
+    //
+    // n3 = tmp;
+    // for(size_t i = 0; i < rows; i++){
+    //   if(a[i][cols-2].a == 0){
+    //     for(size_t j = 0; j < cols-1; j++){
+    //       a1[tmp][j] = a[i][j];
+    //       c1[tmp] = c[i];
+    //     }
+    //     tmp++;
+    //     n3 = tmp;
+    //   }
+    // }
+
+    // for(size_t i = 0; i < rows; i++)
+    //   printf("%d/%d\n", a1[i][0].a, a1[i][0].b);
+
+    size_t newRows = (n1)*(n2-n1)+(n3-n2);
   	struct rational cNew[newRows];
   	struct rational aNew[newRows][cols-1];
 
@@ -173,9 +222,7 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
     // resort
     struct rational a2[newRows][cols-1];
     struct rational c2[newRows];
-    size_t tmp = 0;
-    struct rational tmp0 = {0, 1};
-    struct rational tmp2;
+    tmp = 0;
 
     for(int i = 0; i < newRows; i++)
       printf("%d: %d/%d \n", i, aNew[i][0].a, aNew[i][0].b);
@@ -306,6 +353,5 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 		}
 	}
   //printRational(a2[0][1]);
-  printf("%s \n", "new test starting");
 	return FMalgorithm(rows, cols, a2, c2, n1, n2, n3);
 }
