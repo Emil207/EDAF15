@@ -133,6 +133,10 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
       return true;
     }
 
+    printf("%s \n", "in Data");
+    for(int i = 0; i < rows; i++)
+      printf("%d: %d/%d \n", i, a[i][0].a, a[i][0].b);
+
     size_t newRows = (n1+1)*(n2-n1)+(n3-n2);
   	struct rational cNew[newRows];
   	struct rational aNew[newRows][cols-1];
@@ -144,23 +148,24 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
     printf("%d \n", n2);
     printf("%d \n", n3);
   	for(size_t i = 0; i < n1; i++){
-  		for(size_t j = n1; i < n2; i++){
+  		for(size_t j = n1; j < n2; j++){
   			for (size_t k = 0; k < cols-1; k++){
-  				aNew[i*(n2-n1)+j][k] = subq(a[i][k], a[j][k]);
-          printf("%d/%d \n", aNew[i*(n2-n1)+j][k].a, aNew[i*(n2-n1)+j][k].b);
+  				aNew[i*(n2-n1)+(j-n1)][k] = subq(a[i][k], a[j][k]);
+          printf("%d/%d \n", aNew[i*(n2-n1)+(j-n1)][k].a, aNew[i*(n2-n1)+(j-n1)][k].b);
   			}
-  			cNew[i*(n2-n1)+j] = subq(c[i], c[j]);
+  			cNew[i*(n2-n1)+(j-n1)] = subq(c[i], c[j]);
   		}
   	}
 
     printf("%s \n", "here recursive part 1");
 
     // extracting variables from zero values
-  	for(size_t i = n2+1; i < (n3-n2); i++){
+  	for(size_t i = n2; i < n3; i++){
   		for (size_t k = 0; k < cols-1; k++){
-  			aNew[(n1+1)*(n2-n1)-(n2+1)+i][k] = a[i][k];
+  			aNew[(n1+1)*(n2-n1)-(n2+1)+(i-n2)][k] = a[i][k];
+        printf("%d/%d \n", aNew[(n1+1)*(n2-n1)-(n2+1)+(i-n2)][k].a, aNew[(n1+1)*(n2-n1)-(n2+1)+(i-n2)][k].b);
   		}
-  		cNew[(n1+1)*(n2-n1)-(n2+1)+i] = c[i];
+  		cNew[(n1+1)*(n2-n1)-(n2+1)+(i-n2)] = c[i];
   	}
 
     printf("%s \n", "here recursive part 2");
@@ -172,14 +177,17 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
     struct rational tmp0 = {0, 1};
     struct rational tmp2;
 
+    for(int i = 0; i < newRows; i++)
+      printf("%d: %d/%d \n", i, aNew[i][0].a, aNew[i][0].b);
+
     printf("%s \n", "here recursive part 3");
 
     //sort according to m value (positive)
     for(size_t i = 0; i < newRows; i++){
-      printf("%d/%d \n", tmp0.a, tmp0.b);
-      printf("%d/%d \n", aNew[i][cols-2].a, aNew[i][cols-2].b);
+      //printf("%d/%d \n", tmp0.a, tmp0.b);
+      //printf("%d/%d \n", aNew[i][cols-2].a, aNew[i][cols-2].b);
       if(gt(aNew[i][cols-2], tmp0)){
-        tmp2 = a[i][cols-2];
+        tmp2 = aNew[i][cols-2];
         printf("%d/%d \n", tmp2.a, tmp2.b);
         for(size_t j = 0; j < cols-1; j++){
           a2[tmp][j] = divq(aNew[i][j], tmp2);
@@ -248,6 +256,7 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
   n1 = tmp;
 	for(size_t i = 0; i < rows; i++){
 		if(a[i][cols-1] > 0){
+      printf("%d\n",a[i][cols-1]);
 			tmp2 = a[i][cols-1];
 			for(size_t j = 0; j < cols; j++){
 				a2[tmp][j].a = a[i][j];
