@@ -113,7 +113,7 @@ static void check(char* wd, char* input, int seconds)
 		n = fscanf(cfile, "%zu", &rows0);
 		if (n != 1)
 			error("reading vector size of %s/%s failed", wd, c);
-		
+
 		for (i = 0; i < rows; ++i) {
 			fscanf(cfile, "%d", &x);
 			c[i] = x;
@@ -192,7 +192,7 @@ static void search(void)
 			check(wd, entry->d_name, 0);
 		else if (isdigit(entry->d_name[0])) {
 			if (chdir(entry->d_name) < 0)
-				error("cd to \"%s\"", entry->d_name);	
+				error("cd to \"%s\"", entry->d_name);
 			else
 				search();
 		}
@@ -215,7 +215,7 @@ static void eval(unsigned seconds, size_t cols)
 		error("getcwd failed");
 
 	for (i = 0; i < N; i += 1) {
-		snprintf(input, sizeof input, "A%zu.%zu", cols, i);	
+		snprintf(input, sizeof input, "A%zu.%zu", cols, i);
 		if (access(input, R_OK) != 0)
 			error("cannot read file \"%s/\"%s", wd, input);
 		check(wd, input, seconds);
@@ -231,7 +231,7 @@ static void read_ref()
 	char		filename[100];
 	char		cmd[100];
 
-	if (generate_ref)	
+	if (generate_ref)
 		return;
 
 	snprintf(filename, sizeof filename, "ref.%u", test_time);
@@ -338,7 +338,7 @@ int main(int argc, char** argv)
 			}
 		}
 	}
-					
+
 	if (!generate_ref)
 		printf("welcome to the fourier-motzkin test program. use fm -h for help\n\n");
 
@@ -359,8 +359,8 @@ int main(int argc, char** argv)
 	eval(test_time, 3);
 	if (input_count != N)
 		error("expected input_count = %d\n", N);
-	
-	if (ratio[0] == 0) 
+
+	if (ratio[0] == 0)
 		save_ref();
 	else {
 		prod = 1.0;
@@ -369,7 +369,7 @@ int main(int argc, char** argv)
 		prod = pow(prod, 1.0/N);
 		printf("geometric mean of ratios = %1.2lf (higher is better)\n", prod);
 		fp = fopen("score", "w");
-		if (fp == NULL)	
+		if (fp == NULL)
 			error("cannot open \"score\" for writing");
 		fprintf(fp, "%1.0lf\n", prod * 100); /* print as integer. */
 		fclose(fp);

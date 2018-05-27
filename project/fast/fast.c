@@ -20,8 +20,11 @@ int gcd(int a, int b){
 }
 
 struct rational reduce(struct rational c){
+	if(c.a == 0){
+		c.b = 1;
+		return c;
+	}
   bool negative = false;
-  //printf("%s \n", "here reduce");
   if(c.a < 0){
     negative = !negative;
     c.a = abs(c.a);
@@ -30,9 +33,7 @@ struct rational reduce(struct rational c){
     negative = !negative;
     c.b = abs(c.b);
   }
-  //printf("%s b %d \n", "here reduce", c.b);
 	int d = gcd(c.a, c.b);
-  //printf("%s gcd %d \n", "here reduce", d);
 	c.a = c.a/d;
 	c.b = c.b/d;
   if(negative)
@@ -52,7 +53,6 @@ struct rational subq(struct rational a, struct rational b){
 	struct rational c;
 	c.b = a.b*b.b;
 	c.a = a.a*b.b - b.a*a.b;
-  //printf("%s a.b %d, b.b %d \n", "here subq", a.b, b.b);
 	c = reduce(c);
 	return c;
 }
@@ -74,7 +74,6 @@ struct rational divq(struct rational a, struct rational b){
 }
 
 bool gt(struct rational a, struct rational b){
-  //printf("%s  %d/%d, %d/%d \n", "here gt", a.a, a.b, b.a, b.b);
 	struct rational tmp = subq(b, a);
 	if(tmp.a < 0)
 		return true;
@@ -91,188 +90,159 @@ bool gt(struct rational a, struct rational b){
 
 
 bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct rational c[rows], size_t n1, size_t n2, size_t n3){
-    printf("%d %d \n", n3, cols);
+    // printf("%d %d \n", rows, cols);
+		//
+		// printf("%s \n", "in Data");
+		// for(int i = 0; i < rows; i++){
+		// 	printf("%d: %d/%d ", i, a[i][0].a, a[i][0].b);
+		// 	if(cols > 1)
+		// 		printf(" %d/%d ", a[i][1].a, a[i][1].b);
+		// 	printf("\n",'-');
+		// }
+		//
+		// printf("n1: %d, n2: %d, n3: %d \n", n1, n2, n3);
+
     if(cols == 1){
       struct rational B1;
       B1.a = INT_MAX;
       B1.b = 1;
       for(size_t i = 0; i < n1; i++){
-        //printf("%d/%d \n", c[i].a, c[i].b);
-        if(gt(B1, c[i]))
+        if(gt(B1, c[i])){
           B1 = c[i];
+          //if(x)
+				    //printf("B1 %d/%d \n", c[i].a, c[i].b);
+				}
       }
 
       struct rational b1;
       b1.a = INT_MIN;
       b1.b = 1;
-      for(size_t i = n1+1; i < n2; i++){
-        //printf("%d/%d \n", c[i].a, c[i].b);
-        if(gt(c[i], b1))
+      for(size_t i = n1; i < n2; i++){
+        if(gt(c[i], b1)){
           b1 = c[i];
+          //if(x)
+				    //printf("b1: %d/%d \n", c[i].a, c[i].b);
+				}
       }
 
       //printf("%d/%d, %d/%d \n", b1.a, b1.b, B1.a, B1.b);
       if(gt(b1, B1)){
-        printf("%s \n", "false1");
+        //if(x)
+          //printf("%s \n", "false1");
         return false;
       }
 
       //for(size_t i = 0; i < n3; i++)
         //printf("%d/%d \n", c[i].a, c[i].b);
 
-      for(size_t i = n2+1; i < n3; i++){
+      for(size_t i = n2; i < n3; i++){
         struct rational tmp;
         tmp.a = 0;
         tmp.b = 1;
         if(gt(tmp, c[i])){
-          printf("%s \n", "false2");
+          //if(x)
+            //printf("%s \n", "false2");
           return false;
         }
       }
 
-      printf("%s \n", "true");
+      //if(x)
+        //printf("%s \n", "true");
       return true;
     }
 
-    printf("%s \n", "in Data");
-    for(int i = 0; i < rows; i++)
-      printf("%d: %d/%d \n", i, a[i][0].a, a[i][0].b);
+
 
 
     //reorder according to the next variable
     size_t tmp = 0;
-  //  struct rational a1[rows][cols];
-  //  struct rational c1[rows];
     struct rational tmp0 = {0, 1};
     struct rational tmp2;
-    //
-    // n1 = tmp;
-    // for(size_t i = 0; i < rows; i++){
-    //   if(gt(a[i][cols-2], tmp0)){
-    //     for(size_t j = 0; j < cols-1; j++){
-    //       a1[tmp][j] = a[i][j];
-    //       c1[tmp] = c[i];
-    //     }
-    //     tmp++;
-    //     n1 = tmp;
-    //   }
-    // }
-    //
-    // n2 = tmp;
-    // for(size_t i = 0; i < rows; i++){
-    //   if(gt(tmp0, a[i][cols-2])){
-    //     tmp2 = a[i][cols-2];
-    //     for(size_t j = 0; j < cols-1; j++){
-    //       a1[tmp][j] = a[i][j];
-    //       c1[tmp] = c[i];
-    //     }
-    //     tmp++;
-    //     n2 = tmp;
-    //   }
-    // }
-    //
-    // n3 = tmp;
-    // for(size_t i = 0; i < rows; i++){
-    //   if(a[i][cols-2].a == 0){
-    //     for(size_t j = 0; j < cols-1; j++){
-    //       a1[tmp][j] = a[i][j];
-    //       c1[tmp] = c[i];
-    //     }
-    //     tmp++;
-    //     n3 = tmp;
-    //   }
-    // }
 
-    // for(size_t i = 0; i < rows; i++)
-    //   printf("%d/%d\n", a1[i][0].a, a1[i][0].b);
 
     size_t newRows = (n1)*(n2-n1)+(n3-n2);
+		if(n1 == n3)
+			newRows = n1;
   	struct rational cNew[newRows];
   	struct rational aNew[newRows][cols-1];
 
-    printf("%s \n", "here recursive part 0");
+    //printf("%s \n", "here recursive part 0");
 
     // extracting variables from positives and negatives
-    printf("%d \n", n1);
-    printf("%d \n", n2);
-    printf("%d \n", n3);
   	for(size_t i = 0; i < n1; i++){
   		for(size_t j = n1; j < n2; j++){
   			for (size_t k = 0; k < cols-1; k++){
   				aNew[i*(n2-n1)+(j-n1)][k] = subq(a[i][k], a[j][k]);
-          printf("%d/%d \n", aNew[i*(n2-n1)+(j-n1)][k].a, aNew[i*(n2-n1)+(j-n1)][k].b);
   			}
   			cNew[i*(n2-n1)+(j-n1)] = subq(c[i], c[j]);
   		}
   	}
 
-    printf("%s \n", "here recursive part 1");
+    //printf("%s \n", "here recursive part 1");
 
     // extracting variables from zero values
   	for(size_t i = n2; i < n3; i++){
   		for (size_t k = 0; k < cols-1; k++){
   			aNew[(n1+1)*(n2-n1)-(n2+1)+(i-n2)][k] = a[i][k];
-        printf("%d/%d \n", aNew[(n1+1)*(n2-n1)-(n2+1)+(i-n2)][k].a, aNew[(n1+1)*(n2-n1)-(n2+1)+(i-n2)][k].b);
+			//	printf("%d/%d \n", a[i][k].a, a[i][k].b);
   		}
   		cNew[(n1+1)*(n2-n1)-(n2+1)+(i-n2)] = c[i];
   	}
 
-    printf("%s \n", "here recursive part 2");
+    //printf("%s \n", "here recursive part 2");
 
     // resort
     struct rational a2[newRows][cols-1];
     struct rational c2[newRows];
     tmp = 0;
 
-    for(int i = 0; i < newRows; i++)
-      printf("%d: %d/%d \n", i, aNew[i][0].a, aNew[i][0].b);
 
-    printf("%s \n", "here recursive part 3");
+    //printf("%s \n", "here recursive part 3");
 
     //sort according to m value (positive)
+		n1 = tmp;
     for(size_t i = 0; i < newRows; i++){
-      //printf("%d/%d \n", tmp0.a, tmp0.b);
-      //printf("%d/%d \n", aNew[i][cols-2].a, aNew[i][cols-2].b);
       if(gt(aNew[i][cols-2], tmp0)){
         tmp2 = aNew[i][cols-2];
-        printf("%d/%d \n", tmp2.a, tmp2.b);
         for(size_t j = 0; j < cols-1; j++){
           a2[tmp][j] = divq(aNew[i][j], tmp2);
           c2[tmp] = divq(cNew[i], tmp2);
         }
+				tmp++;
         n1 = tmp;
-        tmp++;
       }
     }
-    printf("%s \n", "here recursive part 4");
+  //  printf("%s \n", "here recursive part 4");
 
     //sort according to m value (negative)
+		n2 = tmp;
     for(size_t i = 0; i < newRows; i++){
       if(gt(tmp0, aNew[i][cols-2])){
-        tmp2 = a[i][cols-2];
+        tmp2 = aNew[i][cols-2];
         for(size_t j = 0; j < cols-1; j++){
           a2[tmp][j] = divq(aNew[i][j], tmp2);
           c2[tmp] = divq(cNew[i], tmp2);
         }
+				tmp++;
         n2 = tmp;
-        tmp++;
       }
     }
-    printf("%s \n", "here recursive part 5");
+    //printf("%s \n", "here recursive part 5");
 
     //sort according to m value (zero)
+		n3 = tmp;
     for(size_t i = 0; i < newRows; i++){
       if(a[i][cols-2].a == 0){
         for(size_t j = 0; j < cols-1; j++){
           a2[tmp][j] = aNew[i][j];
           c2[tmp] = cNew[i];
         }
+				tmp++;
         n3 = tmp;
-        tmp++;
       }
     }
 
-    printf("%s \n", "here recursive part 6");
+  //  printf("%s \n", "here recursive part 6");
 
     return FMalgorithm(newRows, cols-1, a2, c2, n1, n2, n3);
     // // printing matrix
@@ -293,6 +263,10 @@ bool FMalgorithm(size_t rows, size_t cols, struct rational a[rows][cols], struct
 
 
 bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]){
+//	printf("%s \n", "new file");
+  //bool x = false;
+	//if(rows == 8 && cols == 1 && a[0][0] == 70 && a[1][0] == 81)
+		//x = true;
  	struct rational a2[rows][cols];
 	struct rational c2[rows];
 	size_t tmp = 0;
@@ -303,7 +277,6 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
   n1 = tmp;
 	for(size_t i = 0; i < rows; i++){
 		if(a[i][cols-1] > 0){
-      printf("%d\n",a[i][cols-1]);
 			tmp2 = a[i][cols-1];
 			for(size_t j = 0; j < cols; j++){
 				a2[tmp][j].a = a[i][j];
@@ -352,6 +325,10 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 			n3 = tmp;
 		}
 	}
+
+	// for(size_t i = 0; i < rows; i++){
+	// 	printf("a2: %d/%d \n", a2[i][0].a, a2[i][0].b);
+	// }
   //printRational(a2[0][1]);
 	return FMalgorithm(rows, cols, a2, c2, n1, n2, n3);
 }
