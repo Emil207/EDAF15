@@ -19,33 +19,33 @@ long int gcd(long int a, long int b){
 	return a;
 }
 
-struct rational reduce(struct rational c){
-	if(c.a == 0){
-		c.b = 1;
-		return c;
-	}
-  bool negative = false;
-  if(c.a < 0){
-    negative = !negative;
-    c.a = abs(c.a);
-  }
-  if(c.b < 0){
-    negative = !negative;
-    c.b = abs(c.b);
-  }
-	long int d = gcd(c.a, c.b);
-	c.a = c.a/d;
-	c.b = c.b/d;
-  if(negative)
-    c.a = -c.a;
-	return c;
-}
+// struct rational reduce(struct rational c){
+// 	if(c.a == 0){
+// 		c.b = 1;
+// 		return c;
+// 	}
+//   bool negative = false;
+//   if(c.a < 0){
+//     negative = !negative;
+//     c.a = abs(c.a);
+//   }
+//   if(c.b < 0){
+//     negative = !negative;
+//     c.b = abs(c.b);
+//   }
+// 	long int d = gcd(c.a, c.b);
+// 	c.a = c.a/d;
+// 	c.b = c.b/d;
+//   if(negative)
+//     c.a = -c.a;
+// 	return c;
+// }
 
 struct rational addq(struct rational a, struct rational b){
 	struct rational c;
 	c.b = a.b*b.b;
 	c.a = a.a*b.b + b.a*a.b;
-	c = reduce(c);
+	//c = reduce(c);
 	return c;
 }
 
