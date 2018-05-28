@@ -41,13 +41,13 @@ long int gcd(long int a, long int b){
 // 	return c;
 // }
 
-struct rational addq(struct rational a, struct rational b){
-	struct rational c;
-	c.b = a.b*b.b;
-	c.a = a.a*b.b + b.a*a.b;
-	//c = reduce(c);
-	return c;
-}
+// struct rational addq(struct rational a, struct rational b){
+// 	struct rational c;
+// 	c.b = a.b*b.b;
+// 	c.a = a.a*b.b + b.a*a.b;
+// 	//c = reduce(c);
+// 	return c;
+// }
 
 struct rational subq(struct rational a, struct rational b){
 	struct rational c;
