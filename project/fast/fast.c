@@ -9,15 +9,15 @@ typedef struct rational{
 	long int b;
 } rational;
 
-long int gcd(long int a, long int b){
-	long int tmp;
-	while(b!=0){
-		tmp = b;
-		b = a%b;
-		a = tmp;
-	}
-	return a;
-}
+// long int gcd(long int a, long int b){
+// 	long int tmp;
+// 	while(b!=0){
+// 		tmp = b;
+// 		b = a%b;
+// 		a = tmp;
+// 	}
+// 	return a;
+// }
 
 // struct rational reduce(struct rational c){
 // 	if(c.a == 0){
