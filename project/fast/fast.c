@@ -53,7 +53,7 @@ struct rational subq(struct rational a, struct rational b){
 	struct rational c;
 	c.b = a.b*b.b;
 	c.a = a.a*b.b - b.a*a.b;
-	c = reduce(c);
+	//c = reduce(c);
 	return c;
 }
 
@@ -69,7 +69,7 @@ struct rational divq(struct rational a, struct rational b){
 	struct rational c;
 	c.a = a.a*b.b;
 	c.b = a.b*b.a;
-	c = reduce(c);
+	//c = reduce(c);
 	return c;
 }
 
@@ -89,7 +89,7 @@ bool gt(struct rational a, struct rational b){
 #define INT_MIN  -2147483647;
 
 
-bool FMalgorithm(long int rows, long int cols, struct rational a[rows][cols], struct rational c[rows], long int n1, long int n2, long int n3, bool x){
+bool FMalgorithm(long int rows, long int cols, struct rational a[rows][cols], struct rational c[rows], long int n1, long int n2, long int n3){
     // printf("%d %d \n", rows, cols);
 		//
 		// printf("%s \n", "in Data");
@@ -100,16 +100,16 @@ bool FMalgorithm(long int rows, long int cols, struct rational a[rows][cols], st
 		// 	printf("\n",'-');
 		// }
 		//
-		// if(x){
-  //    printf("n1: %ld, n2: %ld, n3: %ld \n", n1, n2, n3);
-  //   }
-  //   if(x)
-  //     for(long int i = 0; i < rows; i++){
-  //       for(long int j = 0; j < cols; j++){
-  //         printf(" %ld/%ld", a[i][j].a, a[i][j].b);
-  //       }
-  //      printf(" < %ld/%ld \n", c[i].a, c[i].b);
-  //     }
+// 		if(x){
+//      printf("n1: %ld, n2: %ld, n3: %ld \n", n1, n2, n3);
+//     }
+// if(x)
+//       for(long int i = 0; i < rows; i++){
+//         for(long int j = 0; j < cols; j++){
+//           printf(" %ld/%ld", a[i][j].a, a[i][j].b);
+//         }
+//        printf(" < %ld/%ld \n", c[i].a, c[i].b);
+//       }
 
       // if(x)
       //   for(long int i = 0; i < rows; i++)
@@ -124,9 +124,9 @@ bool FMalgorithm(long int rows, long int cols, struct rational a[rows][cols], st
       for(long int i = 0; i < n1; i++){
         if(gt(B1, c[i])){
           B1 = c[i];
-          if(x){
-				    printf("B1 %ld/%ld \n", c[i].a, c[i].b);
-          }
+        //  if(x){
+				  //  printf("B1 %ld/%ld \n", c[i].a, c[i].b);
+         // }
 				}
       }
 
@@ -136,16 +136,16 @@ bool FMalgorithm(long int rows, long int cols, struct rational a[rows][cols], st
       for(long int i = n1; i < n2; i++){
         if(gt(c[i], b1)){
           b1 = c[i];
-          if(x){
-				    printf("b1: %ld/%ld \n", c[i].a, c[i].b);
-          }
+        //  if(x){
+				  //  printf("b1: %ld/%ld \n", c[i].a, c[i].b);
+        //  }
 				}
       }
 
       //printf("%d/%d, %d/%d \n", b1.a, b1.b, B1.a, B1.b);
       if(gt(b1, B1)){
-        if(x)
-          printf("%s \n", "false1");
+       // if(x)
+         // printf("%s \n", "false1");
         return false;
       }
 
@@ -157,14 +157,14 @@ bool FMalgorithm(long int rows, long int cols, struct rational a[rows][cols], st
         tmp.a = 0;
         tmp.b = 1;
         if(gt(tmp, c[i])){
-          if(x)
-            printf("%s \n", "false2");
+         // if(x)
+           // printf("%s \n", "false2");
           return false;
         }
       }
 
-      if(x)
-        printf("%s \n", "true");
+      //if(x)
+        //printf("%s \n", "true");
       return true;
     }
 
@@ -201,9 +201,9 @@ bool FMalgorithm(long int rows, long int cols, struct rational a[rows][cols], st
   	for(long int i = n2; i < n3; i++){
   		for (long int k = 0; k < cols-1; k++){
   			aNew[(n1)*(n2-n1)-(n2)+(i-n2)][k] = a[i][k];
-        if(x){
-        	printf("%ld/%ld \n", a[i][k].a, a[i][k].b);
-        }
+        //if(x){
+        	//printf("%ld/%ld \n", a[i][k].a, a[i][k].b);
+        //}
   		}
   		cNew[(n1)*(n2-n1)-(n2)+(i-n2)] = c[i];
   	}
@@ -263,7 +263,7 @@ bool FMalgorithm(long int rows, long int cols, struct rational a[rows][cols], st
 
   //  printf("%s \n", "here recursive part 6");
 
-    return FMalgorithm(newRows, cols-1, a2, c2, n1, n2, n3, x);
+    return FMalgorithm(newRows, cols-1, a2, c2, n1, n2, n3);
     // // printing matrix
   	// for(size_t i = 0; i < rows; i++){
   	// 	for(size_t j= 0; j < cols; j++){
@@ -283,8 +283,8 @@ bool FMalgorithm(long int rows, long int cols, struct rational a[rows][cols], st
 
 bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]){
 //	printf("%s \n", "new file");
-  bool x = false;
-	// if(rows == 2 && cols == 3 && a[0][0] == 6 && a[1][0] == 81){
+  //bool x = false;
+	// if(rows == 3 && cols == 3 && a[0][0] == 27 && a[1][0] == 67){
  //    for(size_t i = 0; i < rows; i++){
  //      for(size_t j = 0; j < cols; j++)
  //        printf("%d ", (int)a[i][j]);
@@ -306,10 +306,10 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 			for(size_t j = 0; j < cols; j++){
 				a2[tmp][j].a = a[i][j];
 				a2[tmp][j].b = tmp2;
-				a2[tmp][j] = reduce(a2[tmp][j]);
+			//	a2[tmp][j] = reduce(a2[tmp][j]);
 				c2[tmp].a = c[i];
 				c2[tmp].b = tmp2;
-        c2[tmp] = reduce(c2[tmp]);
+       // c2[tmp] = reduce(c2[tmp]);
 			}
 			tmp++;
 			n1 = tmp;
@@ -324,10 +324,10 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 			for(size_t j = 0; j < cols; j++){
 				a2[tmp][j].a = a[i][j];
 				a2[tmp][j].b = tmp2;
-				a2[tmp][j] = reduce(a2[tmp][j]);
+				//a2[tmp][j] = reduce(a2[tmp][j]);
 				c2[tmp].a = c[i];
 				c2[tmp].b = tmp2;
-        c2[tmp] = reduce(c2[tmp]);
+        //c2[tmp] = reduce(c2[tmp]);
 			}
 			tmp++;
 			n2 = tmp;
@@ -341,10 +341,10 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 			for(size_t j = 0; j < cols; j++){
 				a2[tmp][j].a = a[i][j];
 				a2[tmp][j].b = 1;
-				a2[tmp][j] = reduce(a2[tmp][j]);
+			//	a2[tmp][j] = reduce(a2[tmp][j]);
 				c2[tmp].a = c[i];
 				c2[tmp].b = 1;
-        c2[tmp] = reduce(c2[tmp]);
+        //c2[tmp] = reduce(c2[tmp]);
 			}
 			tmp++;
 			n3 = tmp;
@@ -355,5 +355,5 @@ bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]
 	// 	printf("a2: %d/%d \n", a2[i][0].a, a2[i][0].b);
 	// }
   //printRational(a2[0][1]);
-	return FMalgorithm((long int)rows, (long int)cols, a2, c2, n1, n2, n3, x);
+	return FMalgorithm((long int)rows, (long int)cols, a2, c2, n1, n2, n3);
 }
