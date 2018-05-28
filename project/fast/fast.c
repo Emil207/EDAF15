@@ -57,13 +57,13 @@ struct rational subq(struct rational a, struct rational b){
 	return c;
 }
 
-struct rational mulq(struct rational a, struct rational b){
-	struct rational c;
-	c.a = a.a*b.a;
-	c.b = a.b*b.b;
-	c = reduce(c);
-	return c;
-}
+// struct rational mulq(struct rational a, struct rational b){
+// 	struct rational c;
+// 	c.a = a.a*b.a;
+// 	c.b = a.b*b.b;
+// 	c = reduce(c);
+// 	return c;
+// }
 
 struct rational divq(struct rational a, struct rational b){
 	struct rational c;
