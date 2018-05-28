@@ -100,24 +100,24 @@ bool FMalgorithm(long int rows, long int cols, struct rational a[rows][cols], st
 		// 	printf("\n",'-');
 		// }
 		//
-		if(x){
-     printf("n1: %ld, n2: %ld, n3: %ld \n", n1, n2, n3);
-    }
-if(x)
-      for(long int i = 0; i < rows; i++){
-        for(long int j = 0; j < cols; j++){
-          printf(" %ld/%ld", a[i][j].a, a[i][j].b);
-        }
-       printf(" < %ld/%ld \n", c[i].a, c[i].b);
-      }
+		// if(x){
+  //    printf("n1: %ld, n2: %ld, n3: %ld \n", n1, n2, n3);
+  //   }
+  //   if(x)
+  //     for(long int i = 0; i < rows; i++){
+  //       for(long int j = 0; j < cols; j++){
+  //         printf(" %ld/%ld", a[i][j].a, a[i][j].b);
+  //       }
+  //      printf(" < %ld/%ld \n", c[i].a, c[i].b);
+  //     }
 
       // if(x)
       //   for(long int i = 0; i < rows; i++)
       //     printf("%ld/%ld \n", c[i].a, c[i].b);
-    if(cols == 1){
+    if(cols == 1 || n3 == 0){
       if(n3 == 0)
-        return false;
-      
+        return true;
+
       struct rational B1;
       B1.a = INT_MAX;
       B1.b = 1;
@@ -178,8 +178,6 @@ if(x)
 
 
     long int newRows = (n1)*(n2-n1)+(n3-n2);
-		if(n1 == n3 && n3 != 1)
-			newRows = n1;
   	struct rational aNew[newRows][cols-1];
     struct rational cNew[newRows];
 
@@ -286,14 +284,14 @@ if(x)
 bool fm(size_t rows, size_t cols, signed char a[rows][cols], signed char c[rows]){
 //	printf("%s \n", "new file");
   bool x = false;
-	if(rows == 2 && cols == 3 && a[0][0] == 6 && a[1][0] == 81){
-    for(size_t i = 0; i < rows; i++){
-      for(size_t j = 0; j < cols; j++)
-        printf("%d ", (int)a[i][j]);
-      printf(" < %d \n", (int)c[i]);
-    }
-		x = true;
-  }
+	// if(rows == 2 && cols == 3 && a[0][0] == 6 && a[1][0] == 81){
+ //    for(size_t i = 0; i < rows; i++){
+ //      for(size_t j = 0; j < cols; j++)
+ //        printf("%d ", (int)a[i][j]);
+ //      printf(" < %d \n", (int)c[i]);
+ //    }
+	// 	x = true;
+ //  }
  	struct rational a2[rows][cols];
 	struct rational c2[rows];
 	long int tmp = 0;
